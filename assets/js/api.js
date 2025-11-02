@@ -1,4 +1,4 @@
-const API = "https://YOUR_VERCEL_DOMAIN.vercel.app/api/gas";
+const API = "https://taxi-abrechnungen.vercel.app/api/gas";
 
 async function api(action, payload = {}, method = "POST") {
   const res = await fetch(
