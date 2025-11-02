@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Taxi Reports — Tägliche Berichte</title>
+
+    <meta name="color-scheme" content="dark light" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./assets/favicon/site.webmanifest" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Marcellus+SC&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Глобальные стили проекта -->
+    <link rel="stylesheet" href="assets/css/global.css" />
+    <link rel="stylesheet" href="assets/css/theme.css" />
+    <!-- Оставляем твой style.css как есть -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/adaptive.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header wrap">
+      <a class="brand" href="index.html" aria-label="MurtalTaxi Start">
+        <div class="brand__logo" aria-hidden="true">
+          <img src="./assets/img/logo1.png" alt="Logo Murtal Taxi" />
+        </div>
+        <span class="brand__title">Murtal&nbsp;TAXI</span>
+      </a>
+
+      <div class="spacer"></div>
+
+      <a
+        class="pill"
+        href="tel:+436601018101"
+        aria-label="Jetzt anrufen: +43 660 1018101"
+      >
+        <svg viewBox="0 0 24 24" role="img">
+          <path
+            d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.36 11.36 0 003.56.57 1 1 0 011 1v3.61a1 1 0 01-1 1A17.02 17.02 0 013 5a1 1 0 011-1h3.61a1 1 0 011 1c0 1.22.2 2.41.57 3.56a1 1 0 01-.24 1.01l-2.32 2.22z"
+          />
+        </svg>
+        <strong>+43&nbsp;660&nbsp;1018101</strong>
+      </a>
+
+      <!-- верхний переключатель темы -->
+      <button
+        id="theme-toggle"
+        class="pill"
+        type="button"
+        aria-label="Thema umschalten"
+      >
+        <svg id="theme-icon" viewBox="0 0 24 24" role="img"></svg>
+        <span class="sr-only">Thema wechseln</span>
+      </button>
+    </header>
+
+    <div class="wrap">
+      <header>
+        <div class="brand">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M3 13h18l-2 7H5l-2-7Zm2-2 3-6h6l3 6"
+              stroke="#7fa7ff"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <h1>Taxi Reports</h1>
+        </div>
+        <div class="row">
+          <span class="pill"
+            ><strong id="loginTag">Nicht angemeldet</strong></span
+          >
+        </div>
+      </header>
+
+      <nav class="tabs" role="tablist" aria-label="Navigation">
+        <button
+          class="tab-btn"
+          role="tab"
+          aria-selected="true"
+          data-tab="report"
+        >
+          Schichtbericht
+        </button>
+        <button class="tab-btn" role="tab" data-tab="remit">
+          Bargeld abgeben
+        </button>
+        <button class="tab-btn" role="tab" data-tab="summary">
+          Fahrerübersicht
+        </button>
+        <button class="tab-btn" role="tab" data-tab="token">
+          PIN/Token ändern
+        </button>
+        <button class="tab-btn" role="tab" data-tab="dashboard">
+          Dashboard (Büro)
+        </button>
+      </nav>
+
+      <!-- Авторизация -->
+      <section class="card" id="auth">
+        <div class="grid">
+          <div class="col6">
+            <label>Driver ID</label>
+            <input id="driver_id" placeholder="z. B. d17" />
+          </div>
+          <div class="col6">
+            <label>PIN/Token</label>
+            <input id="token" type="password" placeholder="geheimer Code" />
+          </div>
+          <div class="full actions">
+            <button class="btn" id="saveCreds">Speichern</button>
+            <span class="hint"
+              >Daten werden lokal gespeichert (LocalStorage).</span
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Отчёт смены -->
+      <section
+        class="card"
+        id="tab-report"
+        role="tabpanel"
+        aria-labelledby="report"
+        style="display: block"
+      >
+        <form id="fReport">
+          <div class="grid">
+            <div class="col4">
+              <label>Datum</label>
+              <input type="date" name="date" required />
+            </div>
+            <div class="col4">
+              <label>Schichtnummer</label>
+              <input
+                type="text"
+                name="shift_no"
+                inputmode="numeric"
+                pattern="[0-9]{1,10}"
+                placeholder="z. B. 12345"
+                required
+              />
+              <div class="hint">Nummer vom Taxameter-Beleg übernehmen.</div>
+            </div>
+            <div class="col4">
+              <label>Fahrzeug (car_no)</label>
+              <input
+                type="text"
+                name="car_no"
+                placeholder="z. B. MT-123AB"
+                required
+              />
+            </div>
+            <div class="col4">
+              <label>Gefahrene Kilometer (km)</label>
+              <input
+                type="number"
+                step="0.1"
+                name="km_driven"
+                value="0"
+                required
+              />
+            </div>
+
+            <div class="col4">
+              <label>Startzeit</label>
+              <input type="time" name="shift_start" required />
+            </div>
+            <div class="col4">
+              <label>Endzeit</label>
+              <input type="time" name="shift_end" required />
+            </div>
+            <div class="col4">
+              <label>Kilometerstand am Ende</label>
+              <input type="number" step="1" name="odo_end" value="0" />
+            </div>
+
+            <div class="col4">
+              <label>Taxameter-Umsatz €</label>
+              <input
+                type="number"
+                step="0.01"
+                name="meter_sales_total"
+                value="0"
+                required
+              />
+            </div>
+            <div class="col4">
+              <label>Barausgaben (Tanken/Wäsche) €</label>
+              <input type="number" step="0.01" name="expenses_cash" value="0" />
+            </div>
+            <div class="col4">
+              <label>Kartenzahlungen (Summe) €</label>
+              <input
+                type="number"
+                step="0.01"
+                name="card_payments_total"
+                value="0"
+              />
+            </div>
+            <div class="col4">
+              <label>QR-Zahlungen (Summe) €</label>
+              <input
+                type="number"
+                step="0.01"
+                name="qr_payments_total"
+                value="0"
+              />
+            </div>
+            <div class="col4">
+              <label>Treuekarten — Anzahl</label>
+              <input type="number" step="1" name="loyalty_count" value="0" />
+            </div>
+            <div class="col4">
+              <label>Treuekarten — Betrag €</label>
+              <input type="number" step="0.01" name="loyalty_sum" value="0" />
+            </div>
+
+            <div class="full">
+              <label
+                >Fahrten auf Rechnung (inkl. KT) — werden von der Abgabe
+                abgezogen</label
+              >
+              <table id="invTable">
+                <thead>
+                  <tr>
+                    <th style="width: 160px">Typ</th>
+                    <th>Beschreibung</th>
+                    <th style="width: 140px">Betrag €</th>
+                    <th style="width: 60px"></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2" class="right">Summe:</td>
+                    <td class="right mono" id="invSum">0.00</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+              <div class="actions">
+                <button class="btn ghost" type="button" id="addInv">
+                  + Position hinzufügen
+                </button>
+              </div>
+            </div>
+
+            <div class="full">
+              <label
+                >Krankentransport — Liste zur Dokumentation (beeinflusst die
+                Berechnung nicht)</label
+              >
+              <table id="ktTable">
+                <thead>
+                  <tr>
+                    <th>Beschreibung</th>
+                    <th style="width: 140px">Betrag (opt) €</th>
+                    <th style="width: 60px"></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                  <tr>
+                    <td class="right">Info-Summe:</td>
+                    <td class="right mono" id="ktSum">0.00</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+              <div class="actions">
+                <button class="btn ghost" type="button" id="addKT">
+                  + KT-Eintrag hinzufügen
+                </button>
+              </div>
+            </div>
+
+            <div class="full">
+              <label
+                >Sonstige Einträge für die Übergabe der Unterlagen (beeinflusst
+                die Berechnung nicht)</label
+              >
+              <table id="miscTable">
+                <thead>
+                  <tr>
+                    <th>Beschreibung</th>
+                    <th>Hinweis</th>
+                    <th style="width: 60px"></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div class="actions">
+                <button class="btn ghost" type="button" id="addMisc">
+                  + Eintrag hinzufügen
+                </button>
+              </div>
+            </div>
+
+            <div class="full">
+              <label>Kommentar</label>
+              <textarea
+                name="comment"
+                placeholder="Zum Beispiel: um 14:10 gab es 30 Min. Standzeit …"
+              ></textarea>
+            </div>
+
+            <div class="full">
+              <div class="row" style="flex-wrap: wrap; gap: 12px 16px">
+                <div class="pill mono">
+                  Summe Rechnung/KT:
+                  <span id="sumInvPill" style="margin-left: 6px">0.00 €</span>
+                </div>
+                <div class="pill mono">
+                  KT (Info):
+                  <span id="sumKtPill" style="margin-left: 6px">0.00 €</span>
+                </div>
+                <div class="pill mono total">
+                  Abzugeben pro Schicht:
+                  <span id="dueNow" class="ok" style="margin-left: 6px"
+                    >0.00 €</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="full actions">
+              <button class="btn" type="submit">Bericht senden</button>
+              <button class="btn secondary" type="button" id="calcBtn">
+                Neu berechnen
+              </button>
+              <span class="hint"
+                >Formel: Taxameter − Ausgaben − Rechnung/KT − Karte − QR −
+                Treuekarten</span
+              >
+            </div>
+          </div>
+        </form>
+        <div class="sep"></div>
+        <div id="reportResult" class="small"></div>
+      </section>
+
+      <!-- Сдать наличные -->
+      <section
+        class="card"
+        id="tab-remit"
+        role="tabpanel"
+        aria-labelledby="remit"
+        style="display: none"
+      >
+        <form id="fRemit" class="grid">
+          <div class="col4">
+            <label>Abgabedatum</label>
+            <input type="date" name="date" required />
+          </div>
+          <div class="col4">
+            <label>Abzugebender Betrag (Bar) €</label>
+            <input type="number" step="0.01" name="amount" required />
+          </div>
+          <div class="col4">
+            <label>Kommentar</label>
+            <input type="text" name="comment" placeholder="für 01–03.11 usw." />
+          </div>
+          <div class="full actions">
+            <button class="btn ok" type="submit">Abgabe speichern</button>
+          </div>
+        </form>
+        <div id="remitResult" class="small"></div>
+      </section>
+
+      <!-- Свод по водителю -->
+      <section
+        class="card"
+        id="tab-summary"
+        role="tabpanel"
+        aria-labelledby="summary"
+        style="display: none"
+      >
+        <div class="actions">
+          <button class="btn" id="loadSummary">Aktualisieren</button>
+        </div>
+        <div id="summaryBox"></div>
+      </section>
+
+      <!-- Смена PIN -->
+      <section
+        class="card"
+        id="tab-token"
+        role="tabpanel"
+        aria-labelledby="token"
+        style="display: none"
+      >
+        <form id="fToken" class="grid">
+          <div class="col4">
+            <label>Alter PIN/Token</label>
+            <input type="password" name="old_token" required />
+          </div>
+          <div class="col4">
+            <label>Neuer PIN/Token</label>
+            <input
+              type="text"
+              name="new_token"
+              minlength="4"
+              maxlength="32"
+              required
+            />
+          </div>
+          <div class="full actions">
+            <button class="btn" type="submit">Ändern</button>
+          </div>
+        </form>
+        <div id="tokenResult" class="small"></div>
+      </section>
+
+      <!-- Дашборд (офис) -->
+      <section
+        class="card"
+        id="tab-dashboard"
+        role="tabpanel"
+        aria-labelledby="dashboard"
+        style="display: none"
+      >
+        <div class="actions">
+          <button class="btn" id="loadDashboard">Dashboard laden</button>
+        </div>
+        <div id="dashBox"></div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer__dev wrap">
+        <a
+          href="https://t.me/aamineev"
+          target="_blank"
+          rel="noopener"
+          aria-label="Schreiben in Telegram @aamineev"
+          class="footer__link"
+        >
+          <svg
+            class="tg-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M9.7 14.7l-.3 4.6c.4 0 .6-.2.8-.4l2-1.9 4.1 3c.7.4 1.2.2 1.4-.6l2.6-12.2c.2-.9-.3-1.3-1-1.1L4 10.3c-.8.2-.8.7-.1.9l4.3 1.3 10-6.3c.5-.3.9-.1.5.2l-9 8.3z"
+              fill="currentColor"
+            />
+          </svg>
+          Entwicklung
+        </a>
+
+        <a
+          href="hilfe.html"
+          class="footer__link footer__help"
+          aria-label="Öffnen der Hilfeseite"
+        >
+          <svg
+            class="help-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm.25 17a1.25 1.25 0 1 1 1.25-1.25A1.25 1.25 0 0 1 12.25 19ZM13.5 13a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1-.75-.75v-.5a2.5 2.5 0 0 1 2.5-2.5 1.5 1.5 0 1 0-1.5-1.5.75.75 0 0 1-1.5 0 3 3 0 1 1 3.75 2.9Z"
+              fill="currentColor"
+            />
+          </svg>
+          Hilfe
+        </a>
+
+        <button
+          id="theme-toggle-footer"
+          class="footer__theme"
+          aria-label="Thema umschalten"
+        >
+          <svg
+            id="theme-icon-footer"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+          ></svg>
+        </button>
+      </div>
+    </footer>
+
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/report.js"></script>
+  </body>
+</html>

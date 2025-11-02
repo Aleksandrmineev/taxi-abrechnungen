@@ -1,0 +1,264 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+html {
+  font-family: var(--font);
+}
+body {
+  margin: 0;
+  color: var(--text);
+  background: radial-gradient(
+      1200px 600px at 110% -10%,
+      var(--bg-grad1),
+      transparent 60%
+    ),
+    radial-gradient(900px 500px at -10% 10%, var(--bg-grad2), transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100%;
+}
+
+/* утилиты */
+.spacer {
+  flex: 1;
+}
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* общие паттерны кнопок */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--ring);
+  transition: transform var(--transition), box-shadow var(--transition),
+    border-color var(--transition);
+  will-change: transform;
+}
+.pill svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--accent);
+}
+.pill:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--accent) 45%, var(--ring));
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.iconbtn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ring);
+  border-radius: 12px;
+  background: var(--card);
+  transition: transform var(--transition), border-color var(--transition);
+  text-decoration: none;
+  color: var(--text);
+}
+.iconbtn svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--accent);
+}
+.iconbtn:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--ring));
+}
+
+/* reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .pill,
+  .iconbtn,
+  .tile {
+    transition: none;
+  }
+  .tile:hover,
+  .pill:hover,
+  .iconbtn:hover {
+    transform: none;
+  }
+}
+
+/* header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px clamp(12px, 3vw, 28px);
+  border-bottom: 1px solid var(--ring);
+  backdrop-filter: saturate(140%) blur(6px);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+.brand__logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  /* было: жёсткий тёмный градиент — заменил на токены */
+  background: radial-gradient(
+      60% 60% at 30% 30%,
+      color-mix(in oklab, var(--card) 85%, #000 15%),
+      transparent 70%
+    ),
+    var(--card);
+  box-shadow: inset 0 0 0 2px var(--ring);
+  position: relative;
+  overflow: hidden;
+}
+.brand__logo img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.brand__title {
+  font-family: var(--font-brand);
+  line-height: 1.05;
+  font-weight: 600;
+  font-size: clamp(22px, 2.6vw, 34px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+
+  /* Золотой градиент → переменная */
+  background: var(--gold-grad);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+
+  animation: goldMove 8s linear infinite; /* плавное переливание */
+}
+
+/* 🔄 Анимация движения золота */
+@keyframes goldMove {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
+}
+
+/* footer */
+footer {
+  padding: 16px clamp(12px, 3vw, 28px);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--ring);
+}
+footer a {
+  color: var(--text);
+  text-decoration: none;
+}
+footer .muted {
+  color: var(--muted);
+}
+
+/* блок ссылок внизу */
+.footer__dev {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 20px clamp(12px, 3vw, 28px);
+  border-top: 1px solid var(--ring);
+}
+.footer__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+/* золотое подчеркивание */
+.footer__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1.5px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+/* hover-эффект */
+.footer__link:hover {
+  color: var(--accent);
+}
+.footer__link:hover::after {
+  transform: scaleX(1);
+}
+
+/* чтобы SVG тоже слегка оживал */
+.footer__link svg {
+  fill: var(--accent);
+  transition: transform var(--transition);
+}
+.footer__link:hover svg {
+  transform: translateY(-2px);
+}
+
+/* кнопка темы внизу */
+.footer__theme {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--ring);
+  background: var(--card);
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition);
+}
+.footer__theme svg {
+  fill: var(--accent);
+}
+.footer__theme:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--ring));
+}
