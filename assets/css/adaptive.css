@@ -1,102 +1,23 @@
-/* десктоп ≥1024px — 3 колонки */
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
+/* adaptive.css — утилиты (adaptive pass) */
 
-/* мобильники <768px — крупнее шрифты и иконки */
 @media (max-width: 767.98px) {
-  .header {
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .pill {
-    padding: 9px 12px;
-  }
-
-  .hero {
-    padding: clamp(16px, 6vw, 28px);
-  }
-  .hero h1 {
-    font-size: clamp(28px, 8vw, 36px); /* крупнее, читаемее */
-  }
-  .hero__sub {
-    font-size: clamp(15px, 4.6vw, 18px);
-  }
-
-  .tile {
-    min-height: 160px;
-    padding: 16px;
-  }
-  .tile__icon {
-    width: 68px;
-    height: 68px;
-    border-radius: 16px;
-  }
-  .tile__icon svg {
-    width: 34px;
-    height: 34px;
-  }
-
-  .tile__title {
-    font-size: clamp(17px, 5.2vw, 20px);
-  }
-  .tile__desc {
-    font-size: clamp(14px, 4.2vw, 16px);
-  }
+  .header { gap: 10px; flex-wrap: wrap; }
+  .hero { padding: clamp(16px, 6vw, 28px); }
+  .hero h1 { font-size: var(--fs-h1); }
+  .hero__sub { font-size: clamp(15px, 4.6vw, 18px); }
+  .tile { min-height: 160px; padding: 16px; }
+  .tile__icon { width: 68px; height: 68px; border-radius: 16px; }
+  .tile__icon svg { width: 34px; height: 34px; }
+  .tile__title { font-size: clamp(17px, 5.2vw, 20px); }
+  .tile__desc  { font-size: clamp(14px, 4.2vw, 16px); }
 }
 
-/* планшеты и шире — всегда в одну строку */
-@media (min-width: 600px) {
-  .actions {
-    flex-wrap: nowrap;
-  }
-}
+@media (min-width: 600px) { .actions { flex-wrap: nowrap; } }
 
-/* телефоны — 2 колонки стабильно */
-@media (max-width: 899.98px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .grid {
-    gap: clamp(10px, 3vw, 16px);
-  } /* чуть компактнее, чтобы точно влезло */
-}
-
-/* десктоп — 3 колонки */
-@media (min-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.tile:after {
-  /* всё как у тебя, но */
-  contain: paint; /* изолируем рисование псевдо-элемента */
-  will-change: transform, opacity;
-}
-
-/* ===== Верхний переключатель темы скрывать на узких экранах ===== */
 @media (max-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  #theme-toggle {
-    display: none;
-  }
-  .brand__logo {
-    width: 24px;
-    height: 24px;
-  }
-  .brand__logo img {
-    width: 24px;
-    height: 24px;
-  }
-  .brand__title {
-    font-size: 18px;
-  }
-  .pill {
-    font-size: clamp(14px, 3.5vw, 16px);
-  }
+  #theme-toggle { display: none; }
+  .brand__logo, .brand__logo img { width: 24px; height: 24px; }
+  .brand__title { font-size: clamp(18px, 5vw, 22px); }
 }
+
+.tile:after { contain: paint; will-change: transform, opacity; }

@@ -1,4 +1,4 @@
-/* ===== 02-components.css — Components (buttons, inputs, cards, table, pills) ===== */
+/* 02-components.css — Components (gold contrast pass) */
 
 /* Tabs */
 .tab-btn {
@@ -6,18 +6,20 @@
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 8px 12px;
+  padding: clamp(6px, 0.7vw, 8px) clamp(10px, 1vw, 12px);
   cursor: pointer;
-  transition: all var(--dur-1) var(--easing);
+  transition: all var(--dur-1, 0.15s)
+    var(--easing, cubic-bezier(0.2, 0.6, 0.2, 1));
   font-weight: 600;
+  font-size: clamp(13px, 1.2vw, 14px);
 }
 .tab-btn:hover {
   border-color: color-mix(in oklab, var(--border) 60%, var(--text) 40%);
 }
 .tab-btn[aria-selected="true"] {
-  background: var(--accent);
+  background: var(--gold);
   border-color: transparent;
-  color: #fff;
+  color: var(--on-accent);
 }
 
 /* Card */
@@ -25,8 +27,8 @@
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 18px;
-  margin-top: 12px;
+  padding: clamp(14px, 1.6vw, 18px);
+  margin-top: clamp(8px, 1vw, 12px);
   box-shadow: var(--shadow);
 }
 
@@ -39,23 +41,30 @@ textarea {
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 10px 12px;
+  padding: 0 clamp(10px, 1.2vw, 12px);
+  height: var(--ctr-h);
+  line-height: 1;
   outline: none;
-  transition: border-color var(--dur-1) var(--easing),
-    box-shadow var(--dur-1) var(--easing);
+  font-size: var(--fs-input);
+  transition: border-color var(--dur-1, 0.15s)
+      var(--easing, cubic-bezier(0.2, 0.6, 0.2, 1)),
+    box-shadow var(--dur-1, 0.15s) var(--easing, cubic-bezier(0.2, 0.6, 0.2, 1));
+}
+textarea {
+  min-height: calc(var(--ctr-h) * 2);
+  padding-block: clamp(8px, 1vw, 10px);
+  line-height: 1.4;
 }
 input::placeholder,
 textarea::placeholder {
   color: color-mix(in oklab, var(--muted) 90%, #000 10%);
 }
-
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: var(--ring);
+  border-color: var(--gold);
   box-shadow: 0 0 0 3px var(--focus);
 }
-
 input:disabled,
 select:disabled,
 textarea:disabled {
@@ -66,23 +75,29 @@ textarea:disabled {
 /* Rows */
 .row {
   display: flex;
-  gap: 8px;
+  gap: clamp(6px, 0.9vw, 10px);
   align-items: center;
 }
 
-/* Buttons */
+/* Buttons: use theme tokens for high contrast */
 .btn {
-  --btn-bg: var(--accent);
-  --btn-fg: #fff;
-  background: var(--btn-bg);
-  color: var(--btn-fg);
-  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+  border: 1px solid var(--btn-border);
   border-radius: var(--radius);
-  padding: 10px 14px;
+  padding: 0 clamp(12px, 1.4vw, 16px);
+  height: var(--ctr-h);
   font-weight: 700;
+  font-size: var(--fs-input);
   cursor: pointer;
-  transition: transform var(--dur-1) var(--easing),
-    box-shadow var(--dur-1) var(--easing), opacity var(--dur-1);
+  transition: transform var(--dur-1, 0.15s)
+      var(--easing, cubic-bezier(0.2, 0.6, 0.2, 1)),
+    box-shadow var(--dur-1, 0.15s) var(--easing, cubic-bezier(0.2, 0.6, 0.2, 1)),
+    opacity var(--dur-1, 0.15s);
 }
 .btn:hover {
   transform: translateY(-1px);
@@ -96,34 +111,32 @@ textarea:disabled {
 }
 
 .btn.secondary {
-  --btn-bg: color-mix(in oklab, var(--surface) 80%, #fff 20%);
-  --btn-fg: var(--text);
-  border-color: var(--border);
+  background: color-mix(in oklab, var(--surface) 85%, var(--card) 15%);
+  color: var(--btn-secondary-fg);
+  border-color: var(--btn-border);
 }
-
 .btn.ghost {
-  --btn-bg: transparent;
-  --btn-fg: var(--text);
   background: transparent;
-  border: 1px dashed var(--border);
+  color: var(--btn-ghost-fg);
+  border: 1px dashed var(--btn-border);
 }
-
 .btn.danger {
-  --btn-bg: var(--danger);
-  --btn-fg: #fff;
+  background: var(--danger);
+  color: #fff;
+  border-color: color-mix(in oklab, var(--danger) 45%, var(--ring));
 }
-
 .btn.ok {
-  --btn-bg: var(--accent-2);
-  --btn-fg: #001a06;
+  background: var(--success);
+  color: #fff;
+  border-color: color-mix(in oklab, var(--success) 45%, var(--ring));
 }
 
-/* Actions row */
+/* Actions */
 .actions {
   display: flex;
-  gap: 10px;
+  gap: clamp(8px, 1.2vw, 12px);
   flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: clamp(6px, 1vw, 8px);
 }
 
 /* Table */
@@ -132,36 +145,53 @@ table {
   border-collapse: collapse;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow: hidden; /* для скруглений */
+  overflow: hidden;
+  font-size: clamp(14px, 1.4vw, 16px);
 }
 th,
 td {
-  padding: 10px 8px;
+  padding: clamp(8px, 1.2vw, 10px) clamp(6px, 1vw, 8px);
   border-bottom: 1px solid var(--border);
   text-align: left;
 }
 tfoot td {
   font-weight: 700;
+  font-size: clamp(14px, 1.5vw, 16px);
 }
 
 /* Pills */
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: var(--surface);
+  gap: clamp(8px, 1vw, 10px);
+  padding: clamp(8px, 1vw, 10px) clamp(12px, 1.4vw, 14px);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
   color: var(--text);
-  border: 1px solid var(--border);
+  background: var(--card);
+  border: 1px solid var(--ring);
+  font-size: clamp(14px, 1.4vw, 16px);
+  transition: transform var(--transition), box-shadow var(--transition),
+    border-color var(--transition);
+  will-change: transform;
+}
+.pill svg {
+  width: clamp(16px, 1.6vw, 18px);
+  height: clamp(16px, 1.6vw, 18px);
+  fill: var(--gold);
+}
+.pill:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--gold) 45%, var(--ring));
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 .pill.mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-/* Status text colors strictly via vars */
+/* State text */
 .total {
-  font-size: 16px;
+  font-size: var(--fs-total);
   font-weight: 800;
 }
 .ok {
@@ -169,4 +199,19 @@ tfoot td {
 }
 .bad {
   color: var(--danger);
+}
+
+/* SVG recolor */
+svg [stroke="#7fa7ff"],
+svg[stroke="#7fa7ff"] {
+  stroke: var(--gold) !important;
+}
+svg [fill="#7fa7ff"],
+svg[fill="#7fa7ff"] {
+  fill: var(--gold) !important;
+}
+.pill svg,
+.iconbtn svg,
+.footer__theme svg {
+  fill: var(--gold);
 }

@@ -1,4 +1,8 @@
-/* style.css — единая точка входа. Порядок важен. */
+/* style.css — точка входа (adaptive pass) */
+@import url("./theme.css") layer(base);
+@import url("./global.css") layer(base);
 @import url("./01-base.css") layer(base);
 @import url("./02-components.css") layer(components);
 @import url("./03-pages.css") layer(pages);
+@import url("./hilfe.css") layer(pages);
+@import url("./adaptive.css") layer(utilities);

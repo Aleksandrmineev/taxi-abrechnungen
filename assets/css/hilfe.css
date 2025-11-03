@@ -1,21 +1,21 @@
-/* Typografie & Layout für Hilfeseite */
+/* hilfe.css — типографика и блоки (adaptive pass) */
 .hilfe {
   max-width: 980px;
   width: 100%;
   margin-inline: auto;
   padding: clamp(18px, 5vw, 34px);
   display: grid;
-  gap: 18px;
+  gap: clamp(14px, 2vw, 18px);
 }
 .hilfe h1 {
   margin: 0;
-  font-size: clamp(28px, 4.2vw, 46px);
+  font-size: var(--fs-h1);
   letter-spacing: 0.01em;
 }
 .hilfe p.lead {
   color: var(--muted);
   font-size: clamp(15px, 1.7vw, 19px);
-  margin: 0 0 8px;
+  margin: 0 0 clamp(6px, 1vw, 8px);
 }
 
 .hilfe__section {
@@ -30,109 +30,42 @@
   padding: clamp(14px, 3.2vw, 22px);
 }
 .hilfe__section h2 {
-  margin: 0 0 10px;
-  font-size: clamp(20px, 2.6vw, 28px);
+  margin: 0 0 clamp(8px, 1.2vw, 10px);
+  font-size: var(--fs-h2);
   letter-spacing: 0.01em;
 }
-.hilfe__text {
-  color: var(--muted);
-}
+.hilfe__text { color: var(--muted); }
 
-/* Секция: заголовок + иконка */
-.headline {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-.headline svg {
-  width: 22px;
-  height: 22px;
-  fill: var(--accent);
-}
+.headline { display: flex; align-items: center; gap: clamp(8px, 1.2vw, 10px); margin-bottom: clamp(4px, 1vw, 6px); }
+.headline svg { width: clamp(20px, 2.2vw, 22px); height: clamp(20px, 2.2vw, 22px); fill: var(--accent); }
 
-/* ВИЗУАЛЬНЫЕ чекбоксы-списки */
-.checklist {
-  list-style: none;
-  padding: 0;
-  margin: 8px 0 0;
-  display: grid;
-  gap: 8px;
-}
-.checkitem {
-  position: relative;
-  padding-left: 32px;
-  line-height: 1.55;
-}
+.checklist { list-style: none; padding: 0; margin: clamp(6px, 1vw, 8px) 0 0; display: grid; gap: clamp(6px, 1.2vw, 8px); }
+.checkitem { position: relative; padding-left: clamp(28px, 3vw, 32px); line-height: 1.55; }
 .checkitem::before {
   content: "";
-  position: absolute;
-  left: 0;
-  top: 0.25em;
-  width: 18px;
-  height: 18px;
-  border-radius: 6px;
-  border: 1.5px solid var(--ring);
-  background: var(--card);
+  position: absolute; left: 0; top: 0.25em;
+  width: clamp(16px, 2vw, 18px); height: clamp(16px, 2vw, 18px); border-radius: 6px;
+  border: 1.5px solid var(--ring); background: var(--card);
 }
 .checkitem.is-done::before {
-  /* визуально «отмечено» */
   border-color: color-mix(in oklab, var(--accent) 60%, var(--ring));
-  background: radial-gradient(
-      circle at 50% 50%,
-      color-mix(in oklab, var(--accent) 85%, transparent) 0 60%,
-      transparent 61%
-    ),
-    var(--card);
+  background: radial-gradient(circle at 50% 50%,
+              color-mix(in oklab, var(--accent) 85%, transparent) 0 60%,
+              transparent 61%), var(--card);
 }
 
-/* Бейджи статуса */
 .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--ring);
-  font-size: 0.85em;
-  color: var(--text);
-  background: var(--card);
-  margin-left: 8px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 2px 8px; border-radius: 999px; border: 1px solid var(--ring);
+  font-size: clamp(12px, 1.2vw, 13px);
+  color: var(--text); background: var(--card); margin-left: 8px;
 }
-.badge::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--muted);
-}
-.badge--planned::before {
-  background: #b38b2f;
-} /* тёплое золото */
-.badge--progress::before {
-  background: #3aa675;
-} /* зелёный прогресс */
-.badge--new::before {
-  background: #518bd6;
-} /* синий NEW */
+.badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.badge--planned::before { background: #b38b2f; }
+.badge--progress::before { background: #3aa675; }
+.badge--new::before { background: #518bd6; }
 
-/* Контактный блок */
-.hilfe__meta {
-  display: grid;
-  gap: 8px;
-  color: var(--muted);
-  font-size: clamp(14px, 1.6vw, 16px);
-}
+.hilfe__meta { display: grid; gap: clamp(6px, 1.2vw, 8px); color: var(--muted); font-size: clamp(14px, 1.6vw, 16px); }
 
-/* Кнопка «назад на главную» */
-.backline {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.backline .pill svg {
-  width: 18px;
-  height: 18px;
-  fill: var(--accent);
-}
+.backline { display: flex; gap: clamp(8px, 1.2vw, 10px); align-items: center; flex-wrap: wrap; }
+.backline .pill svg { width: clamp(16px, 1.6vw, 18px); height: clamp(16px, 1.6vw, 18px); fill: var(--accent); }
