@@ -143,3 +143,47 @@ html[data-theme="dark"] {
     box-shadow: 0 8px 28px color-mix(in oklab, var(--gold) 24%, transparent);
   }
 }
+
+/* ===== Loading states ===== */
+.btn.is-loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.9;
+}
+.btn.is-loading::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--btn-border);
+  border-top-color: var(--gold);
+  transform: translateY(-50%);
+  animation: spin 0.9s linear infinite;
+}
+
+/* любой блок подтверждения в состоянии загрузки */
+[aria-busy="true"] {
+  position: relative;
+  min-height: 42px; /* чтобы не прыгал контент */
+}
+[aria-busy="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--btn-border);
+  border-top-color: var(--gold);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

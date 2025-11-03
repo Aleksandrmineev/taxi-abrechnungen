@@ -188,3 +188,120 @@ svg[fill="#16a34a"] {
   stroke: var(--gold) !important;
   fill: var(--gold) !important;
 }
+
+/* ===== Receipt (кассовый чек) ===== */
+.receipt {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  background: var(--surface, #fff);
+  color: var(--text, #222);
+  border: 1px dashed var(--border, #ddd);
+  border-radius: 12px;
+  padding: 16px 14px;
+  max-width: 560px;
+  line-height: 1.45;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.06);
+}
+
+.receipt__title {
+  text-align: center;
+  font-family: var(--font, "Inter", system-ui, sans-serif);
+  font-weight: 600;
+  margin: 4px 0 8px;
+}
+
+.receipt__meta {
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.receipt__sep {
+  border-top: 1px dashed var(--border, #ddd);
+  margin: 10px 0;
+}
+
+.receipt__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 16px;
+  padding: 2px 0;
+}
+
+.receipt__label {
+  font-family: var(--font, "Inter", system-ui, sans-serif);
+  font-weight: 700; /* названия полей — жирные */
+}
+
+.receipt__value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace; /* значения — mono */
+  white-space: pre-wrap;
+  justify-self: end;
+  text-align: right;
+}
+
+.receipt__section {
+  margin-top: 8px;
+}
+
+.receipt__sub {
+  font-family: var(--font, "Inter", system-ui, sans-serif);
+  font-weight: 600;
+  margin: 6px 0 4px;
+  opacity: 0.85;
+}
+
+/* ====== Step Navigation (Gold Premium style) ====== */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.step-nav button {
+  flex: 1;
+  height: var(--ctr-h);
+  font-family: var(--font);
+  font-size: var(--fs-input);
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: none;
+}
+
+/* Кнопка "Назад" — прозрачная с золотым контуром */
+.step-nav .prev {
+  background: transparent;
+  color: var(--btn-ghost-fg);
+  border: 1px dashed var(--btn-border);
+}
+.step-nav .prev:hover,
+.step-nav .prev:focus-visible {
+  background: color-mix(in oklab, var(--gold) 10%, transparent);
+  box-shadow: var(--brand-glow);
+}
+
+/* Кнопка "Далее" — золотая, как основная CTA */
+.step-nav .next {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+  border: 1px solid var(--btn-border);
+}
+.step-nav .next:hover,
+.step-nav .next:focus-visible {
+  background: color-mix(in oklab, var(--gold) 70%, var(--btn-primary-bg) 30%);
+  box-shadow: var(--brand-glow);
+}
+
+/* Уменьшаем яркость в тёмной теме для читаемости */
+html[data-theme="dark"] .step-nav .prev:hover {
+  background: color-mix(in oklab, var(--gold) 18%, transparent);
+}
+html[data-theme="dark"] .step-nav .next {
+  border-color: color-mix(in oklab, var(--gold) 75%, var(--border));
+}
