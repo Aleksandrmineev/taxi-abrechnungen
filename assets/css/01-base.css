@@ -1,0 +1,158 @@
+/* ===== 01-base.css — Tokens, reset, base ===== */
+
+/* Tokens (легко донастраивать) */
+:root {
+  /* Цвета */
+  --bg: #0b0d12;
+  --surface: #131720;
+  --card: #171c27;
+  --text: #e7ecf6;
+  --muted: #9aa5b1;
+  --accent: #0d5ef7;
+  --accent-2: #22c55e;
+  --danger: #ef4444;
+  --border: #263041;
+  --input: #0f131c;
+
+  /* Доп. токены для состояний/эффектов */
+  --ring: #2a68ff; /* обводка фокуса/активов */
+  --focus: color-mix(in oklab, var(--accent) 30%, transparent);
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+
+  /* Радиусы/отступы/контейнер */
+  --radius: 12px;
+  --gap: 14px;
+  --container-max: 980px;
+
+  /* Типографика */
+  --font: 14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
+    sans-serif;
+
+  /* Скорости/переходы */
+  --easing: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --dur-1: 0.15s;
+  --dur-2: 0.25s;
+}
+
+/* Reset/normalization минимальный */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+}
+body {
+  margin: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--bg) 88%, var(--surface)),
+    var(--surface)
+  );
+  color: var(--text);
+  font: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Базовые блоки/утилиты, без специфики страниц */
+.wrap {
+  max-width: var(--container-max);
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.brand {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.brand h1 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap);
+}
+.full {
+  grid-column: 1 / -1;
+}
+.col4 {
+  grid-column: span 4;
+}
+.col6 {
+  grid-column: span 6;
+}
+.col8 {
+  grid-column: span 8;
+}
+
+@media (max-width: 840px) {
+  .col4,
+  .col6,
+  .col8 {
+    grid-column: 1 / -1;
+  }
+}
+
+.right {
+  text-align: right;
+}
+.small {
+  font-size: 12px;
+}
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.sep {
+  height: 1px;
+  background: var(--border);
+  margin: 10px 0;
+}
+
+/* Подсказки и подписи */
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+}

@@ -1,0 +1,172 @@
+/* ===== 02-components.css — Components (buttons, inputs, cards, table, pills) ===== */
+
+/* Tabs */
+.tab-btn {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all var(--dur-1) var(--easing);
+  font-weight: 600;
+}
+.tab-btn:hover {
+  border-color: color-mix(in oklab, var(--border) 60%, var(--text) 40%);
+}
+.tab-btn[aria-selected="true"] {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Card */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-top: 12px;
+  box-shadow: var(--shadow);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  width: 100%;
+  background: var(--input);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color var(--dur-1) var(--easing),
+    box-shadow var(--dur-1) var(--easing);
+}
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in oklab, var(--muted) 90%, #000 10%);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Rows */
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Buttons */
+.btn {
+  --btn-bg: var(--accent);
+  --btn-fg: #fff;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--dur-1) var(--easing),
+    box-shadow var(--dur-1) var(--easing), opacity var(--dur-1);
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.secondary {
+  --btn-bg: color-mix(in oklab, var(--surface) 80%, #fff 20%);
+  --btn-fg: var(--text);
+  border-color: var(--border);
+}
+
+.btn.ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--text);
+  background: transparent;
+  border: 1px dashed var(--border);
+}
+
+.btn.danger {
+  --btn-bg: var(--danger);
+  --btn-fg: #fff;
+}
+
+.btn.ok {
+  --btn-bg: var(--accent-2);
+  --btn-fg: #001a06;
+}
+
+/* Actions row */
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden; /* для скруглений */
+}
+th,
+td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+tfoot td {
+  font-weight: 700;
+}
+
+/* Pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.pill.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Status text colors strictly via vars */
+.total {
+  font-size: 16px;
+  font-weight: 800;
+}
+.ok {
+  color: #fff;
+}
+.bad {
+  color: var(--danger);
+}

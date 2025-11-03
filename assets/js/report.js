@@ -26,19 +26,107 @@ function updateLoginTag() {
     : "Nicht angemeldet";
 }
 
-// ===== Табы =====
+// ===== Верхние табы (только главный таббар, не внутренние) =====
 function initTabs() {
-  $$(".tab-btn").forEach((b) => {
+  // берём кнопки только из главной навигации
+  const topTabBtns = $$("nav.tabs:not(.tabs--sub) .tab-btn");
+  topTabBtns.forEach((b) => {
     b.addEventListener("click", () => {
-      $$(".tab-btn").forEach((x) => x.setAttribute("aria-selected", "false"));
+      topTabBtns.forEach((x) => x.setAttribute("aria-selected", "false"));
       b.setAttribute("aria-selected", "true");
-      const tab = b.dataset.tab;
-      $$('section[role="tabpanel"]').forEach(
-        (sec) =>
-          (sec.style.display = sec.id === "tab-" + tab ? "block" : "none")
-      );
+      const tab = b.dataset.tab; // report | remit | summary | token | dashboard
+      $$('section[role="tabpanel"]').forEach((sec) => {
+        sec.style.display = sec.id === "tab-" + tab ? "block" : "none";
+      });
     });
   });
+}
+
+// ===== Внутренние табы в форме отчёта + безопасная валидация =====
+function initReportSubTabs() {
+  const form = $("#fReport");
+  if (!form) return;
+
+  const buttons = $$(".tabs--sub .tab-btn", form);
+  const panels = {
+    intro: $("#sub-intro", form),
+    money: $("#sub-money", form),
+    invoice: $("#sub-invoice", form),
+    medical: $("#sub-medical", form),
+    summary: $("#sub-summary", form),
+  };
+
+  // Переносим required в data-req, чтобы управлять сами
+  $$("[required]", form).forEach((el) => {
+    el.dataset.req = "1";
+    el.removeAttribute("required");
+  });
+
+  const inputsOf = (root) => $$("input,select,textarea", root);
+  const setDisabled = (root, v) =>
+    inputsOf(root).forEach((el) => {
+      if (el.type !== "button") el.disabled = v;
+    });
+  const setRequiredIn = (root, v) =>
+    inputsOf(root).forEach((el) => {
+      if (el.dataset.req === "1")
+        v ? el.setAttribute("required", "") : el.removeAttribute("required");
+    });
+
+  function showSub(id) {
+    buttons.forEach((b) =>
+      b.setAttribute("aria-selected", String(b.dataset.subtab === id))
+    );
+    Object.entries(panels).forEach(([key, panel]) => {
+      const active = key === id;
+      panel.style.display = active ? "block" : "none";
+      setDisabled(panel, !active);
+      setRequiredIn(panel, active);
+    });
+  }
+
+  buttons.forEach((b) =>
+    b.addEventListener("click", (e) => {
+      e.stopPropagation(); // не пускаем событие наверх
+      showSub(b.dataset.subtab);
+    })
+  );
+
+  // первая вкладка активна
+  showSub("intro");
+
+  // Проверка перед submit: если пусто — открываем нужную вкладку и фокусим поле
+  function validateAllRequired() {
+    const order = ["intro", "money", "invoice", "medical", "summary"];
+    for (const id of order) {
+      const reqs = inputsOf(panels[id]).filter((el) => el.dataset.req === "1");
+      for (const el of reqs) {
+        const empty =
+          el.type === "checkbox" || el.type === "radio"
+            ? !el.checked
+            : (el.value ?? "").trim() === "";
+        if (empty) {
+          showSub(id);
+          el.setAttribute("required", "");
+          el.reportValidity?.();
+          el.focus();
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  form.addEventListener(
+    "submit",
+    (e) => {
+      if (!validateAllRequired()) {
+        e.preventDefault();
+        e.stopImmediatePropagation?.();
+      }
+    },
+    { capture: true }
+  );
 }
 
 // ===== Динамические строки таблиц =====
@@ -388,8 +476,110 @@ window.addEventListener("DOMContentLoaded", () => {
   $('input[name="date"]').valueAsDate = new Date();
   $('#fRemit input[name="date"]').valueAsDate = new Date();
 
-  initTabs();
+  initTabs(); // верхние
+  initReportSubTabs(); // внутренние
   bindDynamicButtons();
   bindForms();
   recalc();
 });
+
+// ===== ВНУТРЕННИЕ ТАБЫ ШИХТБЕРИХТА (+ безопасная валидация) =====
+function initReportSubTabs() {
+  const scope = $("#tab-report");
+  const form = $("#fReport");
+  if (!scope || !form) return;
+
+  // A. Переносим native-required в data-req, чтобы управлять сами
+  $$("[required]", form).forEach((el) => {
+    el.dataset.req = "1";
+    el.removeAttribute("required");
+  });
+
+  const subbar = $(".tabs--sub", form);
+  const buttons = $$(".tabs--sub .tab-btn", form);
+  const panels = {
+    intro: $("#sub-intro", form),
+    money: $("#sub-money", form),
+    invoice: $("#sub-invoice", form),
+    medical: $("#sub-medical", form),
+    summary: $("#sub-summary", form),
+  };
+
+  // полезки
+  const inputsOf = (root) => $$("input,select,textarea", root);
+  const setDisabled = (root, v) =>
+    inputsOf(root).forEach((el) => {
+      // кнопки не трогаем
+      if (el.type !== "button" && el.getAttribute("type") !== "button")
+        el.disabled = v;
+    });
+  const setRequiredIn = (root, v) =>
+    inputsOf(root).forEach((el) => {
+      if (el.dataset.req === "1") {
+        if (v) el.setAttribute("required", "");
+        else el.removeAttribute("required");
+      }
+    });
+
+  function showSub(id) {
+    buttons.forEach((b) =>
+      b.setAttribute("aria-selected", String(b.dataset.subtab === id))
+    );
+    Object.entries(panels).forEach(([key, panel]) => {
+      if (!panel) return;
+      const active = key === id;
+      panel.style.display = active ? "block" : "none";
+      setDisabled(panel, !active);
+      setRequiredIn(panel, active);
+    });
+  }
+
+  // кнопки
+  buttons.forEach((b) =>
+    b.addEventListener("click", () => showSub(b.dataset.subtab))
+  );
+
+  // первичное раскрытие (+ deep-link ?sub=money или #money)
+  const url = new URL(location.href);
+  const initial =
+    url.searchParams.get("sub") ||
+    (location.hash || "").replace("#", "") ||
+    "intro";
+  showSub(panels[initial] ? initial : "intro");
+
+  // B. Общая проверка перед submit: если пусто — открываем нужную вкладку и фокусим
+  function validateAllRequired() {
+    const order = ["intro", "money", "invoice", "medical", "summary"];
+    for (const id of order) {
+      const panel = panels[id];
+      const reqs = inputsOf(panel).filter((el) => el.dataset.req === "1");
+      for (const el of reqs) {
+        const val = (el.value ?? "").trim();
+        const empty =
+          el.type === "checkbox" || el.type === "radio"
+            ? !el.checked
+            : val === "";
+        if (empty) {
+          showSub(id);
+          el.setAttribute("required", ""); // дать браузеру показать подсказку
+          el.reportValidity?.();
+          el.focus({ preventScroll: false });
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  // C. Встраиваем в submit (через capture — перехватываем раньше твоей логики)
+  form.addEventListener(
+    "submit",
+    (e) => {
+      if (!validateAllRequired()) {
+        e.preventDefault();
+        e.stopImmediatePropagation?.();
+      }
+    },
+    { capture: true }
+  );
+}

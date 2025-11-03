@@ -1,0 +1,179 @@
+/* ===== 03-pages.css — страничные правила (report, tables, responsive) ===== */
+
+/* ---------- Верхние табы (ничего особенного, просто напоминание) ---------- */
+/* Управление логикой в JS (initTabs), здесь только внешний вид делается в components */
+
+/* ---------- REPORT: внутренние саб-табы ---------- */
+/* Унифицированная сетка: 3 → 2 → 1 колонки для всех саб-табов */
+#tab-report .subtab .grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: var(--gap);
+}
+#tab-report .subtab .col4,
+#tab-report .subtab .col6 {
+  grid-column: auto;
+}
+#tab-report .subtab .full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 1024px) {
+  #tab-report .subtab .grid {
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  #tab-report .subtab .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Поля всегда на всю ширину своей колонки */
+#tab-report .subtab input,
+#tab-report .subtab select,
+#tab-report .subtab textarea {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ---------- Чистый вид для двух вкладок: intro + money ---------- */
+/* Убираем «дополнительную карточку»: фон/рамку/тень у контейнеров */
+#sub-intro .grid > .col4,
+#sub-intro .grid > .col6,
+#sub-money .grid > .col4,
+#sub-money .grid > .col6 {
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+
+/* Подписи компактные и контрастные */
+#sub-intro label,
+#sub-money label {
+  color: var(--text);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* Инпуты — базовая тема (без «вторых» рамок и бежевого подложения) */
+#sub-intro input,
+#sub-intro select,
+#sub-intro textarea,
+#sub-money input,
+#sub-money select,
+#sub-money textarea {
+  background: var(--input);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* Фокус — только акцентная обводка */
+#sub-intro input:focus,
+#sub-intro select:focus,
+#sub-intro textarea:focus,
+#sub-money input:focus,
+#sub-money select:focus,
+#sub-money textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 25%, transparent);
+}
+
+/* Хинты под полями */
+#sub-intro .hint,
+#sub-money .hint {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Кнопка «Speichern» (ок) выглядит как важная, но не «главная отправка» */
+#saveCreds.btn.ok {
+  background: var(--success);
+  color: #fff;
+}
+
+/* ---------- Остальные вкладки отчёта (invoice / medical / summary) ---------- */
+/* Таблицы внутри — занимают всю ширину саб-таба */
+#tab-report .subtab table {
+  width: 100%;
+}
+
+/* Адаптив для invTable (карточная раскладка на мобилке) */
+@media (max-width: 640px) {
+  #invTable thead {
+    display: none;
+  }
+  #invTable td,
+  #invTable th {
+    display: block;
+    width: 100%;
+  }
+  #invTable tr {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+  #invTable select,
+  #invTable input {
+    width: 100%;
+  }
+  #invTable td:last-child {
+    text-align: right;
+  }
+}
+
+/* Аналогичный мобильный стиль для ktTable */
+@media (max-width: 640px) {
+  #ktTable thead {
+    display: none;
+  }
+  #ktTable td,
+  #ktTable th {
+    display: block;
+    width: 100%;
+  }
+  #ktTable tr {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+  #ktTable input {
+    width: 100%;
+  }
+  #ktTable td:last-child {
+    text-align: right;
+  }
+}
+
+/* Пилюли итогов — без переопределений темы */
+#tab-report .pill.total {
+  font-size: 16px;
+  font-weight: 800;
+}
+#tab-report .ok {
+  color: var(--success);
+}
+#tab-report .bad {
+  color: var(--danger);
+}
+
+/* ---------- Удалённые «денежные карточки» ----------
+   Раньше здесь были правила с :has(input[name="..."]) которые рисовали
+   вторую рамку/фон вокруг полей. Мы их убрали намеренно, чтобы поля
+   на вкладках intro/money были чистыми и ровно 3-в-ряд. */

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Taxi Reports — Tägliche Berichte</title>
+    <title>MurtalTaxi — Tägliche Abrechnungen</title>
 
     <meta name="color-scheme" content="dark light" />
 
@@ -93,7 +93,7 @@
               stroke-linejoin="round"
             />
           </svg>
-          <h1>Taxi Reports</h1>
+          <h1>Tägliche Abrechnungen</h1>
         </div>
         <div class="row">
           <span class="pill"
@@ -126,26 +126,6 @@
       </nav>
 
       <!-- Авторизация -->
-      <section class="card" id="auth">
-        <div class="grid">
-          <div class="col6">
-            <label>Driver ID</label>
-            <input id="driver_id" placeholder="z. B. d17" />
-          </div>
-          <div class="col6">
-            <label>PIN/Token</label>
-            <input id="token" type="password" placeholder="geheimer Code" />
-          </div>
-          <div class="full actions">
-            <button class="btn" id="saveCreds">Speichern</button>
-            <span class="hint"
-              >Daten werden lokal gespeichert (LocalStorage).</span
-            >
-          </div>
-        </div>
-      </section>
-
-      <!-- Отчёт смены -->
       <section
         class="card"
         id="tab-report"
@@ -154,97 +134,168 @@
         style="display: block"
       >
         <form id="fReport">
-          <div class="grid">
-            <div class="col4">
-              <label>Datum</label>
-              <input type="date" name="date" required />
-            </div>
-            <div class="col4">
-              <label>Schichtnummer</label>
-              <input
-                type="text"
-                name="shift_no"
-                inputmode="numeric"
-                pattern="[0-9]{1,10}"
-                placeholder="z. B. 12345"
-                required
-              />
-              <div class="hint">Nummer vom Taxameter-Beleg übernehmen.</div>
-            </div>
-            <div class="col4">
-              <label>Fahrzeug (car_no)</label>
-              <input
-                type="text"
-                name="car_no"
-                placeholder="z. B. MT-123AB"
-                required
-              />
-            </div>
-            <div class="col4">
-              <label>Gefahrene Kilometer (km)</label>
-              <input
-                type="number"
-                step="0.1"
-                name="km_driven"
-                value="0"
-                required
-              />
-            </div>
+          <!-- Внутренние табы отчёта -->
+          <nav
+            class="tabs tabs--sub"
+            role="tablist"
+            aria-label="Schichtbericht Navigation"
+          >
+            <button
+              class="tab-btn"
+              type="button"
+              aria-selected="true"
+              data-subtab="intro"
+            >
+              Fahrer & Zeiten
+            </button>
+            <button class="tab-btn" type="button" data-subtab="money">
+              Einnahmen / Ausgaben
+            </button>
+            <button class="tab-btn" type="button" data-subtab="invoice">
+              Fahrten auf Rechnung
+            </button>
+            <button class="tab-btn" type="button" data-subtab="medical">
+              Krankentransporte
+            </button>
+            <button class="tab-btn" type="button" data-subtab="summary">
+              Kommentar & Abgabe
+            </button>
+          </nav>
 
-            <div class="col4">
-              <label>Startzeit</label>
-              <input type="time" name="shift_start" required />
-            </div>
-            <div class="col4">
-              <label>Endzeit</label>
-              <input type="time" name="shift_end" required />
-            </div>
-            <div class="col4">
-              <label>Kilometerstand am Ende</label>
-              <input type="number" step="1" name="odo_end" value="0" />
-            </div>
+          <!-- 1) Fahrer & Zeiten (с авторизацией) -->
+          <section id="sub-intro" class="subtab" style="display: block">
+            <div class="grid">
+              <!-- Авторизация (раньше была отдельной секцией #auth) -->
+              <div class="col6">
+                <label>Driver ID</label>
+                <input
+                  id="driver_id"
+                  name="driver_id"
+                  placeholder="z. B. d17"
+                />
+              </div>
+              <div class="col6">
+                <label>PIN/Token</label>
+                <input
+                  id="token"
+                  name="token"
+                  type="password"
+                  placeholder="geheimer Code"
+                />
+              </div>
+              <div class="full actions" style="margin-top: 6px">
+                <button class="btn ok" id="saveCreds" type="button">
+                  Speichern
+                </button>
+                <span class="hint"
+                  >Daten werden lokal gespeichert (LocalStorage).</span
+                >
+              </div>
 
-            <div class="col4">
-              <label>Taxameter-Umsatz €</label>
-              <input
-                type="number"
-                step="0.01"
-                name="meter_sales_total"
-                value="0"
-                required
-              />
+              <!-- Вводные поля смены -->
+              <div class="col4">
+                <label>Datum</label>
+                <input type="date" name="date" required />
+              </div>
+              <div class="col4">
+                <label>Schichtnummer</label>
+                <input
+                  type="text"
+                  name="shift_no"
+                  inputmode="numeric"
+                  pattern="[0-9]{1,10}"
+                  placeholder="z. B. 1234"
+                  required
+                />
+                <div class="hint">Nummer vom Taxameter-Beleg übernehmen.</div>
+              </div>
+              <div class="col4">
+                <label>Fahrzeug (car_no)</label>
+                <input
+                  type="text"
+                  name="car_no"
+                  placeholder="z. B. MT-123AB"
+                  required
+                />
+              </div>
+              <div class="col4">
+                <label>Gefahrene Kilometer (km)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  name="km_driven"
+                  value="0"
+                  required
+                />
+              </div>
+              <div class="col4">
+                <label>Startzeit</label>
+                <input type="time" name="shift_start" required />
+              </div>
+              <div class="col4">
+                <label>Endzeit</label>
+                <input type="time" name="shift_end" required />
+              </div>
+              <div class="col4">
+                <label>Kilometerstand am Ende</label>
+                <input type="number" step="1" name="odo_end" value="0" />
+              </div>
             </div>
-            <div class="col4">
-              <label>Barausgaben (Tanken/Wäsche) €</label>
-              <input type="number" step="0.01" name="expenses_cash" value="0" />
-            </div>
-            <div class="col4">
-              <label>Kartenzahlungen (Summe) €</label>
-              <input
-                type="number"
-                step="0.01"
-                name="card_payments_total"
-                value="0"
-              />
-            </div>
-            <div class="col4">
-              <label>QR-Zahlungen (Summe) €</label>
-              <input
-                type="number"
-                step="0.01"
-                name="qr_payments_total"
-                value="0"
-              />
-            </div>
-            <div class="col4">
-              <label>Treuekarten — Anzahl</label>
-              <input type="number" step="1" name="loyalty_count" value="0" />
-            </div>
-            <div class="col4">
-              <label>Treuekarten — Betrag €</label>
-              <input type="number" step="0.01" name="loyalty_sum" value="0" />
-            </div>
+          </section>
 
+          <!-- 2) Деньги -->
+          <section id="sub-money" class="subtab" style="display: none">
+            <div class="grid">
+              <div class="col4">
+                <label>Taxameter-Umsatz €</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="meter_sales_total"
+                  value="0"
+                  required
+                />
+              </div>
+              <div class="col4">
+                <label>Barausgaben (Wäsche etc.) €</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="expenses_cash"
+                  value="0"
+                />
+              </div>
+              <div class="col4">
+                <label>Kartenzahlungen (Summe) €</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="card_payments_total"
+                  value="0"
+                />
+              </div>
+              <div class="col4">
+                <label>QR-Zahlungen (Summe) €</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="qr_payments_total"
+                  value="0"
+                />
+              </div>
+              <div class="col4">
+                <label>Treuekarten — Anzahl</label>
+                <input type="number" step="1" name="loyalty_count" value="0" />
+              </div>
+              <div class="col4">
+                <label>Treuekarten — Betrag €</label>
+                <input type="number" step="0.01" name="loyalty_sum" value="0" />
+              </div>
+            </div>
+          </section>
+
+          <!-- 3) Fahrten auf Rechnung (входит в расчёт) -->
+          <section id="sub-invoice" class="subtab" style="display: none">
             <div class="full">
               <label
                 >Fahrten auf Rechnung (inkl. KT) — werden von der Abgabe
@@ -274,7 +325,10 @@
                 </button>
               </div>
             </div>
+          </section>
 
+          <!-- 4) Krankentransport (не влияет на финансы) + прочее -->
+          <section id="sub-medical" class="subtab" style="display: none">
             <div class="full">
               <label
                 >Krankentransport — Liste zur Dokumentation (beeinflusst die
@@ -304,7 +358,7 @@
               </div>
             </div>
 
-            <div class="full">
+            <div class="full" style="margin-top: 16px">
               <label
                 >Sonstige Einträge für die Übergabe der Unterlagen (beeinflusst
                 die Berechnung nicht)</label
@@ -325,7 +379,10 @@
                 </button>
               </div>
             </div>
+          </section>
 
+          <!-- 5) Итоги / отправка -->
+          <section id="sub-summary" class="subtab" style="display: none">
             <div class="full">
               <label>Kommentar</label>
               <textarea
@@ -354,7 +411,9 @@
             </div>
 
             <div class="full actions">
-              <button class="btn" type="submit">Bericht senden</button>
+              <button class="btn is-important" type="submit">
+                Bericht senden
+              </button>
               <button class="btn secondary" type="button" id="calcBtn">
                 Neu berechnen
               </button>
@@ -363,8 +422,9 @@
                 Treuekarten</span
               >
             </div>
-          </div>
+          </section>
         </form>
+
         <div class="sep"></div>
         <div id="reportResult" class="small"></div>
       </section>

@@ -1,24 +1,16 @@
+/* theme.css — палитра и темы (gold-premium) */
+
+/* Общие бренд-токены */
 :root {
-  --gold: #c9a14a;
-  --gold-2: #d7b56a;
+  /* Бренд золота */
+  --gold: #c9a14a; /* основной */
+  --gold-2: #d7b56a; /* светлее */
+  --gold-3: #b98b2e; /* глубина */
   --accent: var(--gold);
+  --on-accent: #1b1406; /* цвет текста поверх золотого */
+  --accent-outline: color-mix(in oklab, var(--gold) 65%, #fff 35%);
 
-  /* light */
-  --bg-light: #f7f7f8;
-  --card-light: #ffffff;
-  --text-light: #1f2228;
-  --muted-light: #596273;
-  --ring-light: rgba(0, 0, 0, 0.08);
-
-  /* dark premium */
-  --bg-dark: #0b0f14;
-  --bg-grad1: rgba(160, 180, 255, 0.05);
-  --bg-grad2: rgba(0, 180, 200, 0.06);
-  --card-dark: #171b22; /* светлее фона для лучшего контраста */
-  --text-dark: #e6eef7;
-  --muted-dark: #9fb0c9;
-  --ring-dark: rgba(255, 255, 255, 0.08);
-
+  /* Типографика/радиусы/тени */
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
     "Noto Sans", sans-serif;
   --radius: 16px;
@@ -26,29 +18,26 @@
   --shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
   --tile-gap: 18px;
   --transition: 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
-
   --font-brand: "Marcellus SC", serif;
 
-  /* более деликатный золотой градиент */
+  /* Золотой градиент деликатный */
   --gold-grad: linear-gradient(
     135deg,
     #c9a14a 0%,
-    #d8b45c 40%,
-    #b98b2e 75%,
+    #d8b45c 42%,
+    #b98b2e 78%,
     #c9a14a 100%
   );
-  /* подзаголовки (hero__sub) */
+
+  /* UI размеры */
   --fs-hero-sub: clamp(16px, 2.2vw, 22px);
-
-  /* поля ввода */
   --fs-input: clamp(18px, 2.4vw, 20px);
-  --fs-input-lg: clamp(20px, 2.8vw, 22px); /* для суммы и чаевых */
+  --fs-input-lg: clamp(20px, 2.8vw, 22px);
   --ctr-h: clamp(46px, 6vw, 54px);
-
-  /* итоговая сумма */
   --fs-total: clamp(24px, 3.2vw, 30px);
 }
 
+/* Адаптивные уточнения */
 @media (max-width: 520px) {
   :root {
     --fs-hero-sub: clamp(18px, 4.8vw, 22px);
@@ -58,7 +47,6 @@
     --fs-total: 28px;
   }
 }
-
 @media (min-width: 1200px) {
   :root {
     --fs-hero-sub: 22px;
@@ -69,34 +57,92 @@
   }
 }
 
-/* базовые токены у тебя как есть (gold, accent, ... ) */
-
+/* ===== LIGHT ===== */
 html[data-theme="light"] {
-  --bg: var(--bg-light);
-  --card: var(--card-light);
-  --text: var(--text-light);
-  --muted: var(--muted-light);
-  --ring: var(--ring-light);
+  --bg: #f7f7f8;
+  --card: #ffffff;
+  --text: #1f2228;
+  --muted: #596273;
 
-  /* ✨ добавлено: */
+  /* Ненавязчивые поверхности и бордеры */
   --surface: color-mix(in oklab, var(--bg) 80%, var(--card));
   --input: color-mix(in oklab, var(--card) 95%, var(--bg) 5%);
-  --border: var(--ring);
-  --success: #16a34a; /* нейтральный зелёный для света */
-  --danger: #dc2626; /* нейтральный красный для света */
+  --border: rgba(0, 0, 0, 0.08);
+
+  /* Акцентные состояния */
+  --ring: rgba(0, 0, 0, 0.08);
+  --focus: color-mix(in oklab, var(--gold) 28%, transparent);
+
+  /* Семантика */
+  --success: #16a34a;
+  --danger: #dc2626;
 }
 
+/* ===== DARK (premium) ===== */
 html[data-theme="dark"] {
-  --bg: var(--bg-dark);
-  --card: var(--card-dark);
-  --text: var(--text-dark);
-  --muted: var(--muted-dark);
-  --ring: var(--ring-dark);
+  --bg: #0b0f14;
+  --card: #171b22; /* чуть светлее фона */
+  --text: #e6eef7;
+  --muted: #9fb0c9;
 
-  /* ✨ добавлено: */
   --surface: color-mix(in oklab, var(--bg) 65%, var(--card));
   --input: color-mix(in oklab, var(--card) 92%, var(--bg) 8%);
-  --border: var(--ring);
-  --success: #22c55e; /* читабельный зелёный на тёмном */
-  --danger: #ef4444; /* читабельный красный на тёмном */
+  --border: rgba(255, 255, 255, 0.08);
+
+  --ring: rgba(255, 255, 255, 0.08);
+  --focus: color-mix(in oklab, var(--gold) 35%, transparent);
+
+  --success: #22c55e;
+  --danger: #ef4444;
+}
+
+/* ===== Мягкая бренд-подсветка (используй где нужно) ===== */
+:root {
+  --brand-glow: 0 0 0 3px color-mix(in oklab, var(--gold) 22%, transparent);
+}
+
+/* ===== Рекомендации по применению акцента =====
+1) Важные CTA-кнопки: делаем заливку золотом и тёмный читаемый текст (var(--on-accent)).
+2) Второстепенные: прозрачные/secondary с золотой рамкой/иконкой.
+3) Фокусы, hover-границы и иконки — через var(--accent), чтобы золото было «точечно».
+*/
+
+/* Лёгкая настройка кнопок через существующие классы .btn */
+@layer overrides {
+  /* Базовая .btn уже берёт --accent как фон. Обеспечим читаемость и деликатное свечение. */
+  .btn {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  .btn:hover {
+    box-shadow: var(--brand-glow);
+  }
+  .btn:focus-visible {
+    box-shadow: var(--brand-glow);
+  }
+
+  /* Уточняем цвет текста поверх золотого */
+  .btn:not(.secondary):not(.ghost):not(.danger):not(.ok) {
+    color: var(--on-accent);
+  }
+
+  /* Вторичные — тонкая золотая рамка, прозрачный фон */
+  .btn.secondary {
+    border-color: var(--accent-outline);
+    color: color-mix(in oklab, var(--text) 85%, var(--accent) 15%);
+  }
+
+  /* Контурная «ghost» — делаем бордер пунктирный золотистым, но мягким */
+  .btn.ghost {
+    border-color: color-mix(in oklab, var(--accent) 45%, var(--border));
+    color: color-mix(in oklab, var(--text) 80%, var(--accent) 20%);
+  }
+
+  /* Вариант «важная CTA» (если нужен отдельный класс) */
+  .btn.is-important {
+    --btn-bg: var(--gold);
+    color: var(--on-accent);
+    background-image: var(--gold-grad);
+    border: 1px solid color-mix(in oklab, var(--gold) 65%, #fff 35%);
+    box-shadow: 0 8px 28px color-mix(in oklab, var(--gold) 24%, transparent);
+  }
 }

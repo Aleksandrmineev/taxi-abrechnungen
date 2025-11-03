@@ -67,7 +67,7 @@
 /* десктоп — 3 колонки */
 @media (min-width: 900px) {
   .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -79,6 +79,9 @@
 
 /* ===== Верхний переключатель темы скрывать на узких экранах ===== */
 @media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
   #theme-toggle {
     display: none;
   }
